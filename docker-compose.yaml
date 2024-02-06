@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  auth:
+    build: ./auth
+    develop:
+      watch:
+        - action: sync
+          path: ./auth
+          target: /auth
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./auth/package.json
+    container_name: auth-container
+    ports:
+      - 3000:3000
+  client:
+    build: ./client
+    develop:
+      watch:
+        - action: sync
+          path: ./client
+          target: /client
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./client/package.json
+    container_name: client-container
+    ports:
+      - 8080:8080
