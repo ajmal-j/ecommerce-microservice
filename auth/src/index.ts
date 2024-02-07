@@ -1,5 +1,5 @@
 import express from "express";
-import { connect } from "./database/db";
+import { connect } from "./database/config/db";
 import authRoutes from "./routes/index";
 import cors from "cors";
 import dotenv from "dotenv";
