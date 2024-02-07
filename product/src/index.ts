@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { connect } from "./database/config/db";
+import { productRoutes } from "./routes";
 dotenv.config();
 const PORT = process.env.PORT ?? 4000;
 
@@ -14,7 +15,7 @@ app.get("/api/product/test", (_, res) => {
   res.send("hi there from server!");
 });
 
-//   app.use("/api/product", authRoutes!);
+app.use("/api/product", productRoutes);
 
 app.get("*", (req, res) => {
   console.log(req.method, req.originalUrl, "not found");
