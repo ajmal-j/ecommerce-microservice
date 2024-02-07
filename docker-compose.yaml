@@ -2,6 +2,9 @@ version: "3.8"
 services:
   auth:
     build: ./auth
+    container_name: auth-container
+    depends_on:
+      - auth-db
     develop:
       watch:
         - action: sync
@@ -11,9 +14,11 @@ services:
             - node_modules/
         - action: rebuild
           path: ./auth/package.json
-    container_name: auth-container
     ports:
       - 3000:3000
+    environment:
+      MONGO_URL : mongodb://user:password@mongodb:3001/userdb
+
   client:
     build: ./client
     develop:
@@ -28,3 +33,21 @@ services:
     container_name: client-container
     ports:
       - 8080:8080
+
+  auth-db:
+    image: mongo:6.0
+    restart: always
+    ports:
+        - 3001:27017
+    volumes:
+        - user_db:/data/db
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: user
+        MONGO_INITDB_ROOT_PASSWORD: password
+
+
+volumes:
+    user_db:
+        name: user_data
+    product_db:
+        name: product_data
