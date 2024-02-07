@@ -14,6 +14,8 @@ export function buildProductRepo({ db }: { db: DocumentType }) {
     async delete(id: string) {
       return await db.findByIdAndDelete(id);
     },
+    async getProductByName(title: string) {
+      return await db.findOne({ title });
+    },
   });
 }
-
