@@ -6,9 +6,11 @@ export function buildMakeProduct() {
     images,
     price,
   }: ProductObjectType) {
-    if (!title || !description) throw new Error("Invalid data");
-    if (price < 1) throw new Error("Invalid price");
-    if (images.length < 1) throw new Error("Add at least one image");
+    if (!title || !description)
+      throw new Error(`Invalid ${title ? "description" : "title"}`);
+    if (!price || price < 1) throw new Error("Invalid price");
+    if (!images || images?.length < 1)
+      throw new Error("Add at least one image");
 
     return Object.freeze({
       title,
