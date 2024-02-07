@@ -16,3 +16,4 @@ export function buildProductRepo({ db }: { db: DocumentType }) {
     },
   });
 }
+

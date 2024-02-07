@@ -5,7 +5,7 @@ export type ProductObjectType = {
   images: string[];
   description: string;
   price: number;
-  isDeleted: boolean;
+  isDeleted?: boolean;
 };
 
 export interface ProductDocument extends Document, ProductObjectType {}
