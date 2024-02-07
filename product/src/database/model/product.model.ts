@@ -1,8 +1,8 @@
-import mongoose, { Document, InferSchemaType } from "mongoose";
+import mongoose, { Document, InferSchemaType, Model } from "mongoose";
 
 export type ProductObjectType = {
   title: string;
-  image: { url: string[] };
+  images: string[];
   description: string;
   price: number;
   isDeleted: boolean;
@@ -20,14 +20,9 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    image: [
-      {
-        url: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
+    images: {
+      type: Array,
+    },
     price: {
       type: Number,
       required: true,
@@ -45,6 +40,9 @@ const productSchema = new mongoose.Schema(
 export type ProductType = { _id: string } & Document &
   InferSchemaType<typeof productSchema>;
 
-export const userModel = mongoose.model<ProductType>("Product", productSchema);
+export const productModel: Model<ProductType> = mongoose.model<ProductType>(
+  "Product",
+  productSchema
+);
 
-export type DocumentType = typeof userModel;
+export type DocumentType = typeof Model;
