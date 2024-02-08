@@ -10,7 +10,7 @@ export interface UserType extends Document, UserObjectType {
   _id: string;
 }
 
-const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema<UserObjectType>(
   {
     name: {
       type: String,
@@ -30,6 +30,9 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-export const userModel = mongoose.model<UserType>("User", userSchema);
+export const userModel = mongoose.model<UserObjectType, UserType>(
+  "User",
+  userSchema
+);
 
 export type DocumentType = typeof userModel;

@@ -8,5 +8,8 @@ export function buildUserRepo({ db }: any) {
     async findByEmail(email: string) {
       return await db.findOne({ email });
     },
+    async findById(id: string) {
+      return await db.findById(id);
+    },
   });
 }
