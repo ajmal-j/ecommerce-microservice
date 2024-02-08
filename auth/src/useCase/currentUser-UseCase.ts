@@ -1,11 +1,5 @@
 import { UserRepositoryType } from "../database";
-import { UserType } from "../database/model/user.model";
 import { TokenType } from "../utils/token";
-
-type UserInput = {
-  email: string;
-  password: string;
-};
 
 export default function currentUserBuild(
   userRepository: UserRepositoryType,
@@ -13,7 +7,8 @@ export default function currentUserBuild(
 ) {
   return async function currentUser(token: string) {
     let validatedToken = tokenFunc.validateToken(token);
-    const _id = await tokenFunc.decodeToken(validatedToken);
-    return await userRepository.findById(_id!);
+    const id = await tokenFunc.decodeToken(validatedToken);
+    if (!id) throw new Error("Id is missing in auth");
+    return await userRepository.findById(id!);
   };
 }

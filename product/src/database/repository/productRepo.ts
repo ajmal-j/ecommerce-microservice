@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { ProductObjectType, DocumentType } from "../model/product.model";
 
-export function buildProductRepo({ db }: { db: DocumentType }) {
+export function buildProductRepo( db :  DocumentType ) {
   return Object.freeze({
     async add(productData: ProductObjectType) {
       return await db.create(productData);

@@ -11,5 +11,6 @@ export default ({
   router.post("/login", makeCallback(logInController));
   router.post("/signup", makeCallback(signUpController));
   router.get("/current-user", makeCallback(currentUserController));
+  
   return router;
 };

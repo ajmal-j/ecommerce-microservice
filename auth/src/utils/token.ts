@@ -11,13 +11,13 @@ export function signToken({ _id }: { _id: string }) {
 
 export async function decodeToken(token: string) {
   if (!ACCESS_TOKEN_SECRET) return null;
-
-  return new Promise<string | null>((resolve) => {
-    jwt.verify(token, ACCESS_TOKEN_SECRET, (error, user) => {
-      if (error) resolve(null);
-      resolve(user as string);
-    });
-  });
+  try {
+    const payload: any = jwt.verify(token, ACCESS_TOKEN_SECRET);
+    return payload.id;
+  } catch (error) {
+    console.log(error);
+    return null
+  }
 }
 export function validateToken(auth: string) {
   const token = auth.split(" ")[1];

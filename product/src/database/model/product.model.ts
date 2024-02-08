@@ -8,8 +8,6 @@ export type ProductObjectType = {
   isDeleted?: boolean;
 };
 
-export interface ProductDocument extends Document, ProductObjectType {}
-
 const productSchema = new mongoose.Schema(
   {
     title: {
@@ -21,7 +19,7 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     images: {
-      type: Array,
+      type: [String],
     },
     price: {
       type: Number,
@@ -38,11 +36,11 @@ const productSchema = new mongoose.Schema(
 );
 
 export type ProductType = { _id: string } & Document &
-  InferSchemaType<typeof productSchema>;
+  InferSchemaType<typeof productSchema> &
+  ProductObjectType;
 
-export const productModel: Model<ProductType> = mongoose.model<ProductType>(
+export const productModel = mongoose.model<ProductType>(
   "Product",
   productSchema
 );
-
-export type DocumentType = typeof Model;
+export type DocumentType = typeof Model<ProductType>;
