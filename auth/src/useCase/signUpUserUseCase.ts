@@ -1,6 +1,7 @@
 import { makeUser } from "../auth";
+import { UserRepositoryType } from "../database";
 
-export default function buildSignUpUser({ userRepository }: any) {
+export default function buildSignUpUser( userRepository : UserRepositoryType) {
   return async function userSignUp(userData: {
     email: string;
     password: string;
