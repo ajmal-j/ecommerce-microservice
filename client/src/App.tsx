@@ -6,6 +6,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./components/logIn/login";
 import SingUp from "./components/signup";
 import AuthProvider from "./providers/userProvider";
+import { Cart } from "./components/cart";
+import { Header } from "./components/header/header";
 
 function App() {
   return (
@@ -14,7 +16,10 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
             <Routes>
-              <Route path='/' element={<Home />} />
+              <Route path='/' element={<Header />}>
+                <Route index element={<Home />} />
+                <Route path='/cart' element={<Cart />} />
+              </Route>
               <Route path='/login' element={<Login />} />
               <Route path='/signup' element={<SingUp />} />
             </Routes>

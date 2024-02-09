@@ -10,7 +10,7 @@ import { ProductTwo } from "../featured";
 export default function Products() {
   const { user } = UserAuth();
   const navigate = useNavigate();
-  const { data: products = [], isLoading } = useQuery("products", async () => {
+  const { data: products = [], isLoading ,} = useQuery("products", async () => {
     try {
       const response = await productApi.get("products");
       if (response.data && response.data.success) {
@@ -28,7 +28,7 @@ export default function Products() {
         <div className='flex justify-between px-3 items-center'>
           <h1 className='text-lg font-medium'>Products</h1>
           <div>
-            <DialogDemo />
+            <DialogDemo  />
           </div>
         </div>
         <div>
