@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -12,8 +13,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "../ui/input";
 import Wrapper from "../wrapper";
-import { Store } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Eye, EyeOff, Store } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { authApi } from "../../utils/axios";
+import toast from "react-hot-toast";
+import { useState } from "react";
+
 const formSchema = z.object({
   email: z.string().email({ message: "Enter a valid email" }),
   password: z
@@ -25,6 +30,8 @@ const formSchema = z.object({
 });
 
 export default function SingUp() {
+  const navigate = useNavigate();
+  const [passState, setPassState] = useState<boolean>(true);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,8 +40,15 @@ export default function SingUp() {
       name: "",
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      await authApi.post("signup", { ...values });
+      toast.success("Signed up.");
+      navigate("/login");
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.response?.data?.message ?? "Sign up failed");
+    }
   }
   return (
     <Wrapper>
@@ -89,8 +103,18 @@ export default function SingUp() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input placeholder='password' {...field} />
+                      <Input
+                        type={passState ? "password" : "text"}
+                        placeholder='password'
+                        {...field}
+                      />
                     </FormControl>
+                    <FormDescription
+                      className='flex justify-end pe-2'
+                     onClick={() => setPassState(!passState)}
+                    >
+                      {passState ? <Eye className="size-5" /> : <EyeOff className="size-5" />}
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

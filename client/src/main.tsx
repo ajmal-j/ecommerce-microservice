@@ -14,7 +14,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       reverseOrder={false}
       toastOptions={{
         success: {
-          className: "rounded-2xl bg-background text-foreground",
+          className: "rounded-2xl border bg-background text-foreground",
+        },
+        error: {
+          className: "rounded-2xl border bg-background text-foreground",
         },
       }}
     />

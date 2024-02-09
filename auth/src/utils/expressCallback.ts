@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 export default function makeCallback(controller: Function) {
   return async (req: Request, res: Response) => {
+    console.log(req.originalUrl);
     try {
       const data = await controller(req);
       if (data) {
