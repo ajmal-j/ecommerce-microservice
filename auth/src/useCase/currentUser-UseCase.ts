@@ -6,8 +6,7 @@ export default function currentUserBuild(
   tokenFunc: TokenType
 ) {
   return async function currentUser(token: string) {
-    let validatedToken = tokenFunc.validateToken(token);
-    const id = await tokenFunc.decodeToken(validatedToken);
+    const id = await tokenFunc.decodeToken(token);
     if (!id) throw new Error("Id is missing in auth");
     return await userRepository.findById(id!);
   };

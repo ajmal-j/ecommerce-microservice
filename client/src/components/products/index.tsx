@@ -2,12 +2,15 @@ import { useQuery } from "react-query";
 import Wrapper from "../wrapper";
 import { productApi } from "@/utils/axios";
 import { DialogDemo } from "../addNewForm";
+import { UserAuth } from "@/providers/userProvider";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { ProductTwo } from "../featured";
 
 export default function Products() {
-  const {
-    data: products = [],
-    isLoading,
-  } = useQuery("products", async () => {
+  const { user } = UserAuth();
+  const navigate = useNavigate();
+  const { data: products = [], isLoading } = useQuery("products", async () => {
     try {
       const response = await productApi.get("products");
       if (response.data && response.data.success) {
@@ -19,7 +22,6 @@ export default function Products() {
       throw new Error("Error fetching data");
     }
   });
-
   return (
     <Wrapper>
       <div className='px-2'>
@@ -28,6 +30,9 @@ export default function Products() {
           <div>
             <DialogDemo />
           </div>
+        </div>
+        <div>
+          <ProductTwo />
         </div>
         <div className='mt-3'>
           {isLoading && "loading..."}
@@ -72,6 +77,14 @@ export default function Products() {
                     </div>
                     <button
                       type='button'
+                      onClick={(e) => {
+                        if (!user) {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          toast.error("Please logIn", { id: "please" });
+                          navigate("/login");
+                        }
+                      }}
                       className='mt-4 border-[2px] w-full rounded-sm bg-black px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black'
                     >
                       Add to Cart

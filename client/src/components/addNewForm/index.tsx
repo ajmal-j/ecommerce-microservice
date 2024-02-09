@@ -10,35 +10,38 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { UserAuth } from "@/providers/userProvider";
 import { productApi } from "@/utils/axios";
 import { handleError } from "@/utils/errorHandler";
 import { Plus } from "lucide-react";
-import { title } from "process";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import z, { ZodError } from "zod";
 
 export type ProductObjectType = {
   title: string;
   images: string;
   description: string;
-  price: string;
+  price: number;
 };
 
 export function DialogDemo() {
+  const { user } = UserAuth();
+  const navigate = useNavigate();
   const productCheck = z.object({
-    title: z.string().min(5, "title must be atleast 5 characters"),
+    price: z.number().positive("please enter a correct price"),
     images: z.string().url("please provide a correct url"),
     description: z
       .string()
-      .min(10, "description must be atleast 10 characters"),
-    price: z.number().positive("please enter a correct price"),
+      .min(10, "Description must be atleast 10 characters"),
+    title: z.string().min(5, "Title must be atleast 5 characters"),
   });
 
   const [newProduct, setNewProduct] = useState<ProductObjectType>({
     description: "",
     images: "",
-    price: "",
+    price: 0,
     title: "",
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +60,7 @@ export function DialogDemo() {
       setNewProduct(() => ({
         description: "",
         images: "",
-        price: "",
+        price: 0,
         title: "",
       }));
     } catch (error: any) {
@@ -72,7 +75,17 @@ export function DialogDemo() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant='outline'>
+        <Button
+          variant='outline'
+          onClick={(e) => {
+            if (!user) {
+              e.stopPropagation();
+              e.preventDefault();
+              toast.error("Please logIn", { id: "please" });
+              navigate("/login");
+            }
+          }}
+        >
           <Plus />
         </Button>
       </DialogTrigger>
@@ -110,6 +123,7 @@ export function DialogDemo() {
             </Label>
             <Input
               id='price'
+              type='number'
               value={newProduct.price}
               onChange={handleChange}
               className='col-span-3'

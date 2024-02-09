@@ -9,7 +9,7 @@ export function buildUserRepo({ db }: any) {
       return await db.findOne({ email });
     },
     async findById(id: string) {
-      return await db.findById(id).select("_id");
+      return await db.findById(id).select("-password");
     },
   });
 }

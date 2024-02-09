@@ -13,20 +13,13 @@ export async function decodeToken(token: string) {
   if (!ACCESS_TOKEN_SECRET) return null;
   try {
     const payload: any = jwt.verify(token, ACCESS_TOKEN_SECRET);
-    return payload.id;
+    return payload;
   } catch (error) {
     console.log(error);
-    return null
+    return null;
   }
-}
-export function validateToken(auth: string) {
-  const token = auth.split(" ")[1];
-  if (!token) throw new Error("Invalid token");
-
-  return token;
 }
 export type TokenType = {
   signToken: typeof signToken;
   decodeToken: typeof decodeToken;
-  validateToken: typeof validateToken;
 };
