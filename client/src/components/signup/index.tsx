@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,23 +15,22 @@ import Wrapper from "../wrapper";
 import { Store } from "lucide-react";
 import { Link } from "react-router-dom";
 const formSchema = z.object({
-  email: z
-    .string()
-    .min(5, {
-      message: "Username must be at least 3 characters.",
-    })
-    .email({ message: "Enter a valid email" }),
+  email: z.string().email({ message: "Enter a valid email" }),
   password: z
     .string()
     .min(8, { message: "Password must be atleast 8 characters." }),
+  name: z.string().min(5, {
+    message: "Username must be at least 3 characters.",
+  }),
 });
 
-export default function Login() {
+export default function SingUp() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
+      name: "",
     },
   });
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -56,8 +54,21 @@ export default function Login() {
             </div>
             <div className='space-y-6 border px-3 py-4 rounded-2xl'>
               <span className='font-bold text-2xl pb-3 block pt-5 ps-1'>
-                Log In
+                Sign Up
               </span>
+              <FormField
+                control={form.control}
+                name='name'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder='name' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name='email'
@@ -86,9 +97,9 @@ export default function Login() {
               />
               <div className='flex flex-col gap-3'>
                 <span className='text-xs text-foreground/50'>
-                  Don't you have an account?.
+                  Do you have an account?.
                   <span className='text-foreground/90 underline'>
-                    <Link to={"/signup"}> Sign Up</Link>
+                    <Link to={"/login"}> Log In</Link>
                   </span>
                 </span>
                 <Button type='submit' className=''>

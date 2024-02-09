@@ -4,6 +4,7 @@ import { ThemeProvider } from "./providers/themeProvider";
 const queryClient = new QueryClient();
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./components/logIn/login";
+import SingUp from "./components/signup";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
+            <Route path='/signup' element={<SingUp />} />
           </Routes>
         </ThemeProvider>
       </QueryClientProvider>
