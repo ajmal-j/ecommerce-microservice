@@ -1,6 +1,6 @@
 import express from "express";
 import makeCallback from "../utils/expressCallback";
-import cartsUseCase from "../useCase/carts-UseCase";
+import { cartsUseCase ,deleteUseCase} from "../useCase/index";
 
 export default () => {
   const router = express.Router();
@@ -9,7 +9,13 @@ export default () => {
     "/add",
     makeCallback((req: any) => {})
   );
-  router.get(
+  router.delete(
+    "/delete",
+    makeCallback((req: any) => {
+      return deleteUseCase(req?.body);
+    })
+  );
+  router.post(
     "/carts",
     makeCallback((req: any) => {
       return cartsUseCase(req?.body?.id);

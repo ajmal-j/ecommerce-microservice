@@ -9,6 +9,7 @@ import AuthProvider from "./providers/userProvider";
 import { Cart } from "./components/cart";
 import { Header } from "./components/header/header";
 import CartProvider from "./providers/cartProvider";
+import { ProductOverview } from "./components/singleProduct";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
                 <Route path='/' element={<Header />}>
                   <Route index element={<Home />} />
                   <Route path='/cart' element={<Cart />} />
+                  <Route path='/product' element={<ProductOverview />} />
                 </Route>
                 <Route path='/login' element={<Login />} />
                 <Route path='/signup' element={<SingUp />} />

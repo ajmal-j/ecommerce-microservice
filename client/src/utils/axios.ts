@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getLocalStorage } from "./localStorage";
+import toast from "react-hot-toast";
 
 const server = "http://localhost:";
 
@@ -11,6 +12,9 @@ export const productApiWithToken = axios.create({
 });
 export const authApi = axios.create({
   baseURL: `${server}3000/api/auth/`,
+});
+export const cartApi = axios.create({
+  baseURL: `${server}5000/api/cart/`,
 });
 export const authApiWithToken = axios.create({
   baseURL: `${server}3000/api/auth/`,
@@ -29,6 +33,20 @@ authApiWithToken.interceptors.request.use(
 productApiWithToken.interceptors.request.use(
   (config) => {
     const token = getLocalStorage();
+    config.headers.Authorization = token;
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+cartApi.interceptors.request.use(
+  (config) => {
+    const token = getLocalStorage();
+    if (!token) {
+      toast.error("Please log in.");
+      return Promise.reject("not authorized");
+    }
     config.headers.Authorization = token;
     return config;
   },
