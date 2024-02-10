@@ -1,6 +1,6 @@
 import express from "express";
 import makeCallback from "../utils/expressCallback";
-import { cartsUseCase ,deleteUseCase} from "../useCase/index";
+import { cartsUseCase, deleteUseCase } from "../useCase/index";
 
 export default () => {
   const router = express.Router();

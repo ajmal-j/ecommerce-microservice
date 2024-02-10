@@ -3,7 +3,7 @@ import Wrapper from "../wrapper";
 import { productApi, productApiWithToken } from "@/utils/axios";
 import { AddNewProduct } from "../addNewForm";
 import { UserAuth } from "@/providers/userProvider";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { ProductTwo } from "../featured";
 import { Trash } from "lucide-react";
@@ -36,17 +36,17 @@ export default function Products() {
   return (
     <Wrapper>
       <div className='px-2'>
+        <div>
+          <span className='text-xl ps-2 tracking-wider text-foreground/70'>
+            Featured
+          </span>
+          <ProductTwo />
+        </div>
         <div className='flex justify-between px-3 items-center'>
           <h1 className='text-lg font-medium'>Products</h1>
           <div>
             <AddNewProduct />
           </div>
-        </div>
-        <div>
-          <span className='block text-center tracking-wider text-foreground/70'>
-            Featured
-          </span>
-          <ProductTwo />
         </div>
         <div className='mt-3'>
           {isLoading && "loading..."}
@@ -55,11 +55,13 @@ export default function Products() {
             {products.length ? (
               products.map((product: any) => (
                 <div key={product._id} className='rounded-md border'>
-                  <img
-                    src={product.images[0]}
-                    alt='Laptop'
-                    className='aspect-[16/9] object-cover w-full rounded-md md:aspect-auto md:h-[300px] lg:h-[200px]'
-                  />
+                  <Link to={`/product/${product._id}`}>
+                    <img
+                      src={product.images[0]}
+                      alt='Laptop'
+                      className='aspect-[16/9] object-cover w-full rounded-md md:aspect-auto md:h-[300px] lg:h-[200px]'
+                    />
+                  </Link>
                   <div className='p-4'>
                     <h1 className='inline-flex items-center text-lg font-semibold'>
                       {product.title}
