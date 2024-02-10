@@ -1,6 +1,7 @@
 import express from "express";
 import { connect } from "./database/config/db";
 import { cartRouter } from "./routes/index";
+import "./event/index";
 import cors from "cors";
 import dotenv from "dotenv";
 const PORT = process.env.PORT ?? 5000;

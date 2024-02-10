@@ -26,16 +26,17 @@ export type ProductObjectType = {
   price: number;
 };
 
-export function DialogDemo() {
+export function AddNewProduct() {
   const { user } = UserAuth();
   const navigate = useNavigate();
+
   const productCheck = z.object({
     price: z.number().positive("please enter a correct price"),
     images: z.string().url("please provide a correct url"),
     description: z
       .string()
       .min(10, "Description must be atleast 10 characters"),
-    title: z.string().min(5, "Title must be atleast 5 characters"),
+    title: z.string().min(4, "Title must be atleast 5 characters"),
   });
 
   const [newProduct, setNewProduct] = useState<ProductObjectType>({
@@ -68,7 +69,7 @@ export function DialogDemo() {
         handleError(error);
       } else {
         toast.error(error?.response?.data?.message ?? "no added.");
-        console.log();
+        console.log(error);
       }
     }
   };

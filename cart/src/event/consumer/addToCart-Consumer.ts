@@ -1,23 +1,20 @@
-import { Channel } from "amqplib";
 import { addToCartUseCase } from "../../useCase";
 import { dataFromMessage } from "../../utils/rabbit-utils";
-
-export default async function buildAddToCartConsumer({
-  channel,
-}: {
-  channel: Channel;
-}) {
+import amqp from "amqplib";
+export default async function buildAddToCartConsumer() {
   try {
+    const connection = await amqp.connect("amqp://rabbitmq:5672");
+    const channel = await connection.createChannel();
     await channel.assertQueue("addToCart");
     channel.consume("addToCart", async (msg) => {
       const data = dataFromMessage(msg);
-      console.log(data, "from ampq");
+      console.log('first', data)
       try {
         await addToCartUseCase(data);
       } catch (error) {
         console.log(error);
       } finally {
-        channel.ack(msg);
+        if (msg) channel.ack(msg);
       }
     });
   } catch (error) {

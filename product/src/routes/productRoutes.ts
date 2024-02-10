@@ -22,10 +22,12 @@ export function buildProductRoutes({
     makeCallback(async (req: TODO) => {
       const response = await verifyUser(req);
       if (response === undefined)
-      throw new Error(response?.message ?? "No user");
-      return await addToCart({ productId: req.id, userId: response._id });
+        throw new Error(response?.message ?? "No user");
+      return await addToCart({
+        productId: req?.body?.data?.id,
+        userId: response?._id,
+      });
     })
   );
-
   return router;
 }

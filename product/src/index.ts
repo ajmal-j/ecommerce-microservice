@@ -1,9 +1,7 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import { connect } from "./database/config/db";
-import { productRoutes } from "./routes";
-dotenv.config();
+import { productRoutes } from "./routes/index";
 const PORT = process.env.PORT ?? 4000;
 
 connect(process.env.MONGO_URL!);

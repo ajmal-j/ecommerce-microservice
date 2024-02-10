@@ -1,3 +1,3 @@
 import buildCartRouter from "./cartRoutes";
 
-export const cartRouter = buildCartRouter("", "");
+export const cartRouter = buildCartRouter();

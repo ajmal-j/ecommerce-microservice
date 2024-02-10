@@ -5,7 +5,7 @@ export const setLocalStorage = (token: string) => {
 
 export const getLocalStorage = () => {
   const token = localStorage.getItem("userCredentials");
-  if (!token) throw new Error("NOTOKENINLOCALSTORAGE");
+  if (!token) throw new Error("Not authorized");
   return token ? JSON.parse(token) : null;
 };
 export const removeLocalStorage = () => {

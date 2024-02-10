@@ -1,16 +1,17 @@
 import { useQuery } from "react-query";
 import Wrapper from "../wrapper";
-import { productApi } from "@/utils/axios";
-import { DialogDemo } from "../addNewForm";
+import { productApi, productApiWithToken } from "@/utils/axios";
+import { AddNewProduct } from "../addNewForm";
 import { UserAuth } from "@/providers/userProvider";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { ProductTwo } from "../featured";
+import { Trash } from "lucide-react";
 
 export default function Products() {
   const { user } = UserAuth();
   const navigate = useNavigate();
-  const { data: products = [], isLoading ,} = useQuery("products", async () => {
+  const { data: products = [], isLoading } = useQuery("products", async () => {
     try {
       const response = await productApi.get("products");
       if (response.data && response.data.success) {
@@ -22,22 +23,36 @@ export default function Products() {
       throw new Error("Error fetching data");
     }
   });
+  const deleteProduct = async (id: string) => {
+    try {
+      await productApi.delete("/delete", { data: { id } });
+      location.reload();
+      toast.success("Deleted");
+    } catch (error) {
+      toast.error("Not deleted.");
+      console.log(error);
+    }
+  };
   return (
     <Wrapper>
       <div className='px-2'>
         <div className='flex justify-between px-3 items-center'>
           <h1 className='text-lg font-medium'>Products</h1>
           <div>
-            <DialogDemo  />
+            <AddNewProduct />
           </div>
         </div>
         <div>
+          <span className='block text-center tracking-wider text-foreground/70'>
+            Featured
+          </span>
           <ProductTwo />
         </div>
         <div className='mt-3'>
           {isLoading && "loading..."}
+          {products.length && ""}
           <div className='mx-auto grid w-full max-w-7xl items-center space-y-4 px-2 py-10 md:grid-cols-2 md:gap-6 md:space-y-0 lg:grid-cols-4'>
-            {products.length &&
+            {products.length ? (
               products.map((product: any) => (
                 <div key={product._id} className='rounded-md border'>
                   <img
@@ -66,23 +81,43 @@ export default function Products() {
                         Size :{" "}
                       </span>
                       <span className='block cursor-pointer rounded-md border border-gray-300 p-1 px-2 text-xs font-medium'>
-                        8 UK
-                      </span>
-                      <span className='block cursor-pointer rounded-md border border-gray-300 p-1 px-2 text-xs font-medium'>
                         9 UK
                       </span>
                       <span className='block cursor-pointer rounded-md border border-gray-300 p-1 px-2 text-xs font-medium'>
                         10 UK
                       </span>
                     </div>
+                    <div>
+                      <Trash
+                        onClick={(e) => {
+                          if (!user) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            toast.error("Please logIn", { id: "please" });
+                            navigate("/login");
+                          } else deleteProduct(product._id);
+                        }}
+                        className='mt-2 cursor-pointer size-5 ms-auto text-red-800 hover:text-red-500'
+                      />
+                    </div>
                     <button
                       type='button'
-                      onClick={(e) => {
+                      onClick={async (e) => {
                         if (!user) {
                           e.stopPropagation();
                           e.preventDefault();
                           toast.error("Please logIn", { id: "please" });
                           navigate("/login");
+                        } else {
+                          try {
+                            await productApiWithToken.post("/addToCart", {
+                              data: { id: product._id },
+                            });
+                            toast.success("Added to cart");
+                          } catch (error) {
+                            console.log(error);
+                            toast.error("Not added to cart");
+                          }
                         }
                       }}
                       className='mt-4 border-[2px] w-full rounded-sm bg-black px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black'
@@ -91,7 +126,12 @@ export default function Products() {
                     </button>
                   </div>
                 </div>
-              ))}
+              ))
+            ) : (
+              <span className='block text-center text-foreground/50'>
+                No products available
+              </span>
+            )}
           </div>
         </div>
       </div>

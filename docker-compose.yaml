@@ -36,6 +36,24 @@ services:
       - 4000:4000
     environment:
       MONGO_URL: mongodb://product-db:27017/productdb
+  cart:
+    build: ./cart
+    container_name: cart-container
+    depends_on:
+      - cart-db
+    develop:
+      watch:
+        - action: sync
+          path: ./cart
+          target: /cart
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./cart/package.json
+    ports:
+      - 5000:5000
+    environment:
+      MONGO_URL: mongodb://cart-db:27017/productdb
   client:
     build: ./client
     develop:
@@ -57,6 +75,13 @@ services:
       - 3001:27017
     volumes:
       - user_db:/data/db
+  cart-db:
+    image: mongo
+    restart: always
+    ports: 
+      - 5001:27017
+    volumes:
+      - cart_db:/data/db
   product-db:
     image: mongo
     restart: always
@@ -74,3 +99,5 @@ volumes:
     name: user_data
   product_db:
     name: product_data
+  cart_db:
+    name: cart_data

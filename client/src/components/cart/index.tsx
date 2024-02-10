@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Trash, Heart } from "lucide-react";
 import Wrapper from "../wrapper";
+import { UserCart } from "@/providers/cartProvider";
 
 const products = [
   {
@@ -42,6 +43,11 @@ const products = [
 ];
 
 export function Cart() {
+  const { cart, setCart } = UserCart();
+  console.log(cart);
+  useEffect(() => {
+    
+  }, []);
   return (
     <Wrapper>
       <div className='mx-auto flex max-w-3xl flex-col space-y-4 p-6 px-2 sm:p-10 sm:px-2'>

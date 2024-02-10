@@ -17,8 +17,7 @@ export default ({
     if (!productId) throw new Error("Product id is  missing");
     const product = await productRepository.getProduct(productId);
     if (!product) throw new Error("Product not found");
-
     addToCartEvent({ userId, product });
-    return { userId, product }
+    return { userId, product };
   };
 };

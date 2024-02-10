@@ -11,7 +11,6 @@ export async function verifyUser(req: TODO) {
       },
     })
     .then((response) => {
-      console.log({ data: response.data });
       return response.data.data;
     })
     .catch((err) => {

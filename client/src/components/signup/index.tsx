@@ -61,7 +61,9 @@ export default function SingUp() {
             <div className='flex flex-col'>
               <div>
                 <span className='flex gap-3 flex-col items-center justify-center mb-8'>
-                  <Store className='cursor-pointer size-11' />
+                  <Link to={"/"}>
+                    <Store className='cursor-pointer size-11' />
+                  </Link>
                   <span className='font-bold text-2xl'>Urban Grove</span>
                 </span>
               </div>
@@ -111,9 +113,13 @@ export default function SingUp() {
                     </FormControl>
                     <FormDescription
                       className='flex justify-end pe-2'
-                     onClick={() => setPassState(!passState)}
+                      onClick={() => setPassState(!passState)}
                     >
-                      {passState ? <Eye className="size-5" /> : <EyeOff className="size-5" />}
+                      {passState ? (
+                        <Eye className='size-5' />
+                      ) : (
+                        <EyeOff className='size-5' />
+                      )}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

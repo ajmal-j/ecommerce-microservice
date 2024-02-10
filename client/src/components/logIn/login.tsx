@@ -65,7 +65,9 @@ export default function Login() {
             <div className='flex flex-col'>
               <div>
                 <span className='flex gap-3 flex-col items-center justify-center mb-8'>
-                  <Store className='cursor-pointer size-11' />
+                  <Link to={"/"}>
+                    <Store className='cursor-pointer size-11' />
+                  </Link>
                   <span className='font-bold text-2xl'>Urban Grove</span>
                 </span>
               </div>

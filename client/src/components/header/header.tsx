@@ -7,6 +7,7 @@ import { authApiWithToken } from "@/utils/axios";
 import { removeLocalStorage } from "@/utils/localStorage";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { DropdownProfile } from "../profileDropDown";
 
 export const Header = () => {
   const { user, setUser } = UserAuth();
@@ -19,7 +20,7 @@ export const Header = () => {
       })
       .catch((error: any) => {
         console.log(error);
-        if (error?.message !== "NOTOKENINLOCALSTORAGE") {
+        if (error?.message !== "Not authorized") {
           navigate("/login");
           toast.error("Authorization failed.");
           removeLocalStorage();
@@ -40,22 +41,7 @@ export const Header = () => {
           <Link to={"/cart"}>
             <ShoppingCart className='cursor-pointer size-5 hover:text-foreground/50' />
           </Link>
-          {user ? (
-            <span className='relative group'>
-              <User className='cursor-pointer size-5 hover:text-foreground/50' />
-              <span className='absolute top-8 flex justify-center items-center left-0 right-0'>
-                {user?.name && (
-                  <div className='px-4 text-nowrap py-2 border rounded-full bg-background opacity-0 group-hover:opacity-100 transition-all duration-150 ease-in-out'>
-                    {user?.name}
-                  </div>
-                )}
-              </span>
-            </span>
-          ) : (
-            <Link to={"/login"}>
-              <UserX className='s size-5 hover:text-foreground/50' />
-            </Link>
-          )}
+          <DropdownProfile user={user} />
           <ModeToggle />
         </div>
       </div>
