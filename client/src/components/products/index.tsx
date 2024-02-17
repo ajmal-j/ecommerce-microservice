@@ -6,11 +6,26 @@ import { UserAuth } from "@/providers/userProvider";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { ProductTwo } from "../featured";
-import { Trash } from "lucide-react";
+import { Edit3, Trash } from "lucide-react";
+import { UserCart } from "@/providers/cartProvider";
 
-export default function Products() {
+type Product = {
+  featured?: boolean;
+  deleteFeature?: boolean;
+  addToCart?: boolean;
+  add?: boolean;
+};
+
+export default function Products({
+  add = false,
+  addToCart = true,
+  featured = true,
+  deleteFeature = false,
+}: Product) {
   const { user } = UserAuth();
+  const { setCart } = UserCart();
   const navigate = useNavigate();
+
   const { data: products = [], isLoading } = useQuery("products", async () => {
     try {
       const response = await productApi.get("products");
@@ -36,17 +51,23 @@ export default function Products() {
   return (
     <Wrapper>
       <div className='px-2'>
-        <div>
-          <span className='text-xl ps-2 tracking-wider text-foreground/70'>
-            Featured
-          </span>
-          <ProductTwo />
-        </div>
-        <div className='flex justify-between px-3 items-center'>
-          <h1 className='text-lg font-medium'>Products</h1>
+        {featured && (
           <div>
-            <AddNewProduct />
+            <span className='text-xl ps-2 tracking-wider text-foreground/70'>
+              Featured
+            </span>
+            <ProductTwo />
           </div>
+        )}
+        <div className='flex justify-between px-3 items-center'>
+          {add && (
+            <>
+              <h1 className='text-lg font-medium'>Products</h1>
+              <div>
+                <AddNewProduct />
+              </div>
+            </>
+          )}
         </div>
         <div className='mt-3'>
           {isLoading && "loading..."}
@@ -90,42 +111,57 @@ export default function Products() {
                       </span>
                     </div>
                     <div>
-                      <Trash
-                        onClick={(e) => {
+                      {deleteFeature && (
+                        <div className='flex justify-end gap-4 mt-3'>
+                          <Edit3 className='text-foreground/70 cursor-pointer size-5 '  />
+                          <Trash
+                            onClick={(e) => {
+                              if (!user) {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                toast.error("Please logIn", { id: "please" });
+                                navigate("/login");
+                              } else deleteProduct(product._id);
+                            }}
+                            className='cursor-pointer size-5 text-red-800 hover:text-red-500'
+                          />
+                        </div>
+                      )}
+                    </div>
+                    {addToCart && (
+                      <button
+                        type='button'
+                        onClick={async (e) => {
                           if (!user) {
                             e.stopPropagation();
                             e.preventDefault();
                             toast.error("Please logIn", { id: "please" });
                             navigate("/login");
-                          } else deleteProduct(product._id);
-                        }}
-                        className='mt-2 cursor-pointer size-5 ms-auto text-red-800 hover:text-red-500'
-                      />
-                    </div>
-                    <button
-                      type='button'
-                      onClick={async (e) => {
-                        if (!user) {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          toast.error("Please logIn", { id: "please" });
-                          navigate("/login");
-                        } else {
-                          try {
-                            await productApiWithToken.post("/addToCart", {
-                              data: { id: product._id },
-                            });
-                            toast.success("Added to cart");
-                          } catch (error) {
-                            console.log(error);
-                            toast.error("Not added to cart");
+                          } else {
+                            try {
+                              await productApiWithToken.post("/addToCart", {
+                                data: { id: product._id },
+                              });
+                              setCart((prev: any) => {
+                                let found = prev.find(
+                                  (current: any) =>
+                                    current?.product?._id === product?._id
+                                );
+                                if (found) return prev;
+                                return [...prev, { product }];
+                              });
+                              toast.success("Added to cart");
+                            } catch (error) {
+                              console.log(error);
+                              toast.error("Not added to cart");
+                            }
                           }
-                        }
-                      }}
-                      className='mt-4 border-[2px] w-full rounded-sm bg-black px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black'
-                    >
-                      Add to Cart
-                    </button>
+                        }}
+                        className='mt-4 border-[2px] w-full rounded-sm bg-black px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black'
+                      >
+                        Add to Cart
+                      </button>
+                    )}
                   </div>
                 </div>
               ))

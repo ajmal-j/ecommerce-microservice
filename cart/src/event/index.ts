@@ -1,3 +1,3 @@
-import buildAddToCartConsumer from "./consumer/addToCart-Consumer";
+// import buildAddToCartConsumer from "./consumer/addToCart-Consumer";
 
-buildAddToCartConsumer();
+// buildAddToCartConsumer();

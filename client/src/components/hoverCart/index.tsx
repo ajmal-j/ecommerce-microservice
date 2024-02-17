@@ -1,4 +1,4 @@
-import { Heart, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import {
   HoverCard,
   HoverCardContent,
@@ -9,15 +9,21 @@ import { UserCart } from "@/providers/cartProvider";
 import toast from "react-hot-toast";
 import { cartApi } from "@/utils/axios";
 import { UserAuth } from "@/providers/userProvider";
+import { Link } from "react-router-dom";
 
 export function HoverCart({ children }: { children: ReactNode }) {
-  const { cart } = UserCart();
+  const { cart, setCart } = UserCart();
   const { user } = UserAuth();
   const handleDelete = async (productId: string) => {
     try {
       await cartApi.delete("/delete", {
         data: { userId: user?._id, productId },
       });
+      setCart(
+        (prev: []) =>
+          prev.filter(({ product }: any) => product?._id !== productId) as []
+      );
+
       toast.success("Deleted.");
     } catch (error) {
       console.log(error);
@@ -28,54 +34,66 @@ export function HoverCart({ children }: { children: ReactNode }) {
     <HoverCard openDelay={200}>
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
       <HoverCardContent className='w-max'>
-        <ul className='flex flex-col divide-y divide-gray-200'>
-          {cart?.length > 0 &&
-            cart.map(({ product }: any) => (
-              <li
-                key={product?._id}
-                className='flex flex-col py-6 sm:flex-row sm:justify-between'
-              >
-                <div className='flex w-full space-x-2 sm:space-x-4'>
-                  <img
-                    className='h-16 w-16 flex-shrink-0 rounded object-contain outline-none dark:border-transparent sm:h-24 sm:w-24'
-                    src={product?.images[0]}
-                  />
-                  <div className='flex w-full flex-col justify-between pb-4'>
-                    <div className='flex w-full justify-between space-x-2 pb-2'>
-                      <div className='space-y-1'>
-                        <h3 className='text-lg capitalize font-semibold leading-snug sm:pr-8'>
-                          {product?.title}
-                        </h3>
-                      </div>
-                      <div className='text-right'>
-                        <p className='text-lg font-semibold'>
-                          ₹ {product?.price}
-                        </p>
-                      </div>
+        <span className='text-foreground/80 ps-2 pb-2'>Cart </span>
+        <div className='mt-6 space-y-6'>
+          <ul className='space-y-4'>
+            {cart.length &&
+              cart.map(({ product }: { product: any }) => (
+                <li key={product._id} className='flex items-center gap-4'>
+                  <Link to={`/product/${product._id}`}>
+                    <img
+                      src={product.images[0]}
+                      className='h-16 w-16 rounded object-cover'
+                    />
+                  </Link>
+                  <div className='flex justify-between items-center  w-full'>
+                    <div>
+                      <h3 className='text-sm text-foreground'>
+                        {product.title}
+                      </h3>
+                      <dl className='mt-0.5 space-y-px text-[10px] text-muted-foreground'>
+                        <div>
+                          <dd className='inline font-bold'>
+                            ₹ {product.price}
+                          </dd>
+                        </div>
+                      </dl>
                     </div>
-                    <div className='flex divide-x text-sm'>
-                      <button
-                        onClick={() => handleDelete(product?._id)}
-                        type='button'
-                        className='flex items-center space-x-2 px-2 py-1 pl-0'
-                      >
-                        <Trash size={16} />
-                        <span>Remove</span>
-                      </button>
-                      <button
-                        type='button'
-                        className='flex items-center space-x-2 px-2 py-1'
-                      >
-                        <Heart size={16} />
-                        <span>Add to favorites</span>
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => handleDelete(product?._id)}
+                      type='button'
+                      className='flex items-center space-x-2 px-2 py-1 pl-0'
+                    >
+                      <Trash size={16} />
+                    </button>
                   </div>
-                </div>
-              </li>
-            ))}
-        </ul>
-        <div className='space-y-1 text-right'>
+                </li>
+              ))}
+          </ul>
+          <div className='space-y-4 text-center'>
+            <Link to={"/cart"}>
+              <button
+                type='button'
+                className='w-full rounded-md border px-3 py-2 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black'
+              >
+                View Cart ({cart.length})
+              </button>
+            </Link>
+            <button
+              type='button'
+              className='w-full rounded-md border px-3 py-2 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black'
+            >
+              Checkout
+            </button>
+            <a
+              href='#'
+              className='inline-block text-sm text-gray-600 transition hover:text-gray-700 hover:underline hover:underline-offset-4'
+            >
+              Continue shopping &rarr;
+            </a>
+          </div>
+        </div>
+        <div className='space-y-1 text-right text-sm pt-3'>
           <p>
             Total :{" "}
             <span className='font-semibold'>

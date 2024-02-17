@@ -11,5 +11,8 @@ export function buildUserRepo({ db }: any) {
     async findById(id: string) {
       return await db.findById(id).select("-password");
     },
+    async users() {
+      return await db.find().select("-password");
+    },
   });
 }

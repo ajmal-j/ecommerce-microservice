@@ -10,6 +10,7 @@ import { Cart } from "./components/cart";
 import { Header } from "./components/header/header";
 import CartProvider from "./providers/cartProvider";
 import { ProductOverview } from "./components/singleProduct";
+import { Admin } from "./pages/Admin";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
                 </Route>
                 <Route path='/login' element={<Login />} />
                 <Route path='/signup' element={<SingUp />} />
+                <Route path='/admin' element={<Admin />} />
               </Routes>
             </ThemeProvider>
           </QueryClientProvider>

@@ -1,10 +1,16 @@
-import { productApi } from "@/utils/axios";
+import { UserCart } from "@/providers/cartProvider";
+import { UserAuth } from "@/providers/userProvider";
+import { productApi, productApiWithToken } from "@/utils/axios";
 import { Star } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const ProductOverview = () => {
+  const navigate = useNavigate();
+  const { setCart } = UserCart();
   const productId = useParams()?.id;
+  const { user } = UserAuth();
   const [product, setProduct] = useState<any>({});
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -57,6 +63,32 @@ export const ProductOverview = () => {
                   </span>
                   <button
                     type='button'
+                    onClick={async (e) => {
+                      if (!user) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        toast.error("Please logIn", { id: "please" });
+                        navigate("/login");
+                      } else {
+                        try {
+                          await productApiWithToken.post("/addToCart", {
+                            data: { id: product._id },
+                          });
+                          setCart((prev: any) => {
+                            let found = prev.find(
+                              (current: any) =>
+                                current?.product?._id === product?._id
+                            );
+                            if (found) return prev;
+                            return [...prev, { product }];
+                          });
+                          toast.success("Added to cart");
+                        } catch (error) {
+                          console.log(error);
+                          toast.error("Not added to cart");
+                        }
+                      }
+                    }}
                     className='rounded-md border bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black'
                   >
                     Add to Cart

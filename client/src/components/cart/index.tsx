@@ -35,6 +35,10 @@ export function Cart() {
       await cartApi.delete("/delete", {
         data: { userId: user?._id, productId },
       });
+      setCart(
+        (prev: []) =>
+          prev.filter(({ product }: any) => product?._id !== productId) as []
+      );
       toast.success("Deleted.");
     } catch (error) {
       console.log(error);

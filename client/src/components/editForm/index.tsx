@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { productApi } from "@/utils/axios";
 import { handleError } from "@/utils/errorHandler";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { toast } from "react-hot-toast";
 import z, { ZodError } from "zod";
 
@@ -23,7 +23,7 @@ export type ProductObjectType = {
   price: number;
 };
 
-export function AddNewProduct() {
+export function AddNewProduct({ children }: { children: ReactNode }) {
   const productCheck = z.object({
     price: z.number().positive("please enter a correct price"),
     images: z.string().url("please provide a correct url"),
@@ -69,15 +69,10 @@ export function AddNewProduct() {
   };
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant='outline'>
-          <Plus />
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className='sm:max-w-[425px] rounded-2xl'>
         <DialogHeader>
-          <DialogTitle>Add new product</DialogTitle>
-          {/* <DialogDescription> </DialogDescription> */}
+          <DialogTitle>Edit product</DialogTitle>
         </DialogHeader>
         <div className='grid gap-4 py-4'>
           <div className='grid grid-cols-4 items-center gap-4'>
