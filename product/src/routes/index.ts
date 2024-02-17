@@ -4,6 +4,7 @@ import { makeProductController } from "../controllers/makeProductController";
 import { getProductsController } from "../controllers/getProductsController";
 import { getProductController } from "../controllers/getProductController";
 import { verifyUser } from "../utils/verifyUser";
+import editProductController from "../controllers/editProduct-Controller";
 
 export const productRoutes = buildProductRoutes({
   deleteProductController,
@@ -11,4 +12,5 @@ export const productRoutes = buildProductRoutes({
   getProductController,
   getProductsController,
   verifyUser,
+  editProductController,
 });

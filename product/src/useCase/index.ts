@@ -5,6 +5,7 @@ import buildGetProduct from "./getProduct-UseCase";
 import buildGetProducts from "./getProducts-UseCase";
 import buildAddToCart from "./addToCart-UseCase";
 import addToCartEvent from "../event/producer/addToCart-Producer";
+import editProductEvent from "./editProduct-UseCase";
 
 export const addProduct = buildAddProduct(productRepository);
 export const getProduct = buildGetProduct(productRepository);
@@ -14,3 +15,4 @@ export const addToCart = buildAddToCart({
   productRepository,
   addToCartEvent,
 });
+export const editProduct = editProductEvent(productRepository);

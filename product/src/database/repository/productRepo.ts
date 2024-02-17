@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { ProductObjectType, DocumentType } from "../model/product.model";
 
-export function buildProductRepo( db :  DocumentType ) {
+export function buildProductRepo(db: DocumentType) {
   return Object.freeze({
     async add(productData: ProductObjectType) {
       return await db.create(productData);
@@ -19,6 +19,9 @@ export function buildProductRepo( db :  DocumentType ) {
     },
     async getProductByName(title: string) {
       return await db.findOne({ title });
+    },
+    async updateProduct({ id, product }: { id: string; product: {} }) {
+      return await db.findByIdAndUpdate(id, product);
     },
     makeObjectId(id: string) {
       return new mongoose.Types.ObjectId(id);

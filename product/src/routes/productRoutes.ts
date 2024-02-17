@@ -9,6 +9,7 @@ export function buildProductRoutes({
   makeProductController,
   getProductController,
   getProductsController,
+  editProductController,
   verifyUser,
 }: productControllerType & { verifyUser: TODO }) {
   const router = express.Router();
@@ -17,6 +18,7 @@ export function buildProductRoutes({
   router.delete("/delete", makeCallback(deleteProductController));
   router.get("/product", makeCallback(getProductController));
   router.get("/products", makeCallback(getProductsController));
+  router.patch("/edit", makeCallback(editProductController));
   router.post(
     "/addToCart",
     makeCallback(async (req: TODO) => {

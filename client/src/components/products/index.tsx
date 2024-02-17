@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { ProductTwo } from "../featured";
 import { Edit3, Trash } from "lucide-react";
 import { UserCart } from "@/providers/cartProvider";
+import { EditProduct } from "../editForm";
 
 type Product = {
   featured?: boolean;
@@ -113,7 +114,10 @@ export default function Products({
                     <div>
                       {deleteFeature && (
                         <div className='flex justify-end gap-4 mt-3'>
-                          <Edit3 className='text-foreground/70 cursor-pointer size-5 '  />
+                          <EditProduct product={product}>
+                            <Edit3 className='text-foreground/70 cursor-pointer size-5 ' />
+                          </EditProduct>
+
                           <Trash
                             onClick={(e) => {
                               if (!user) {

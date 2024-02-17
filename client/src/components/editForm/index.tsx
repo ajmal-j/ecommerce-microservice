@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { productApi } from "@/utils/axios";
 import { handleError } from "@/utils/errorHandler";
-import { Plus } from "lucide-react";
 import { ReactNode, useState } from "react";
 import { toast } from "react-hot-toast";
 import z, { ZodError } from "zod";
@@ -21,9 +20,16 @@ export type ProductObjectType = {
   images: string;
   description: string;
   price: number;
+  _id?: string;
 };
 
-export function AddNewProduct({ children }: { children: ReactNode }) {
+export function EditProduct({
+  children,
+  product,
+}: {
+  children: ReactNode;
+  product: ProductObjectType;
+}) {
   const productCheck = z.object({
     price: z.number().positive("please enter a correct price"),
     images: z.string().url("please provide a correct url"),
@@ -33,11 +39,9 @@ export function AddNewProduct({ children }: { children: ReactNode }) {
     title: z.string().min(4, "Title must be atleast 5 characters"),
   });
 
-  const [newProduct, setNewProduct] = useState<ProductObjectType>({
-    description: "",
-    images: "",
-    price: 0,
-    title: "",
+  const [updateProduct, setNewProduct] = useState<ProductObjectType>(() => {
+    const { images, description, price, title } = product;
+    return { description, price, title, images: images[0] };
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -49,20 +53,18 @@ export function AddNewProduct({ children }: { children: ReactNode }) {
   };
   const handleUpdate = async () => {
     try {
-      productCheck.parse(newProduct);
-      await productApi.post("/add", { ...newProduct });
-      toast.success("Added.");
-      setNewProduct(() => ({
-        description: "",
-        images: "",
-        price: 0,
-        title: "",
-      }));
+      productCheck.parse(updateProduct);
+      await productApi.patch("/edit", {
+        id: product._id,
+        product: { ...updateProduct },
+      });
+      toast.success("Updated.");
+      location.reload();
     } catch (error: any) {
       if (error instanceof ZodError) {
         handleError(error);
       } else {
-        toast.error(error?.response?.data?.message ?? "not added.");
+        toast.error(error?.response?.data?.message ?? "not updated.");
         console.log(error);
       }
     }
@@ -81,7 +83,7 @@ export function AddNewProduct({ children }: { children: ReactNode }) {
             </Label>
             <Input
               id='title'
-              value={newProduct.title}
+              value={updateProduct.title}
               onChange={handleChange}
               className='col-span-3'
             />
@@ -92,7 +94,7 @@ export function AddNewProduct({ children }: { children: ReactNode }) {
             </Label>
             <Input
               id='description'
-              value={newProduct.description}
+              value={updateProduct.description}
               onChange={handleChange}
               className='col-span-3'
             />
@@ -104,7 +106,7 @@ export function AddNewProduct({ children }: { children: ReactNode }) {
             <Input
               id='price'
               type='number'
-              value={newProduct.price}
+              value={updateProduct.price}
               onChange={handleChange}
               className='col-span-3'
             />
@@ -115,7 +117,7 @@ export function AddNewProduct({ children }: { children: ReactNode }) {
             </Label>
             <Input
               id='images'
-              value={newProduct.images}
+              value={updateProduct.images}
               onChange={handleChange}
               className='col-span-3'
             />
