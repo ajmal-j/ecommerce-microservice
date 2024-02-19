@@ -12,8 +12,20 @@ export default (db: dbType) => {
       return db.find({ userId: id });
     },
     async delete({ userId, productId }: { userId: string; productId: string }) {
-      await db.findOneAndDelete({ userId }, { "product._id": productId });
-      return;
+      return await db.findOneAndDelete(
+        { userId },
+        { "product._id": productId }
+      );
+    },
+    async updateProduct({ product }: any) {
+      return await db.updateMany(
+        { "product._id": product._id },
+        {
+          $set: {
+            product : product,
+          },
+        }
+      );
     },
   });
 };

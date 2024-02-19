@@ -1,3 +1,4 @@
-// import buildAddToCart from "./producer/addToCart-Producer";
+// import updateProductInCartEvent from "./producer/editProductInCart";
 
-// export const addToCartEvent = buildAddToCart();
+
+// updateProductInCartEvent()

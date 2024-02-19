@@ -21,7 +21,7 @@ export function buildProductRepo(db: DocumentType) {
       return await db.findOne({ title });
     },
     async updateProduct({ id, product }: { id: string; product: {} }) {
-      return await db.findByIdAndUpdate(id, product);
+      return await db.findByIdAndUpdate(id, product, { new: true });
     },
     makeObjectId(id: string) {
       return new mongoose.Types.ObjectId(id);

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-db
+  labels:
+    app: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-db
+  template:
+    metadata:
+      labels:
+        app: auth-db
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:6.0
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: auth-db-volume
+              mountPath: /data/db
+      volumes:
+        - name: auth-db-volume
+          persistentVolumeClaim:
+            claimName: auth-vol
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-db
+spec:
+  type: NodePort
+  selector:
+    app: auth-db
+  ports:
+    - port: 27017
+      targetPort: 27017
+      protocol: TCP

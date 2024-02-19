@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: raabitmq-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: raabitmq
+  template:
+    metadata:
+      labels:
+        app: raabitmq
+    spec:
+      containers:
+        - name: raabitmq
+          image: rabbitmq
+          ports:
+            - containerPort: 5672
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+spec:
+  selector:
+    app: raabitmq
+  ports:
+    - name: raabitmq
+      protocol: TCP
+      port: 5672
+      targetPort: 5672

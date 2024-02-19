@@ -1,36 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: product-depl
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: product
   template:
     metadata:
       labels:
-        app: auth
+        app: product
     spec:
       containers:
-        - name: auth
-          image: ajmalj/ecom-auth
+        - name: product
+          image: ajmalj/ecom-product
           ports:
-            - containerPort: 3000
+            - containerPort: 4000
           env:
             - name : MONGO_URL
-              value: mongodb://auth-db:27017/productdb
+              value: mongodb://product-db:27017/productdb
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-srv
+  name: product-srv
 spec:
   selector:
-    app: auth
+    app: product
   ports:
-    - name: auth
+    - name: product
       protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 4000
+      targetPort: 4000

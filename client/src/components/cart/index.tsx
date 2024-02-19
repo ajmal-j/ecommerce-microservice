@@ -68,7 +68,14 @@ export function Cart() {
                         <h3 className='text-lg font-semibold leading-snug sm:pr-8'>
                           {product.title}
                         </h3>
-                        <p className='text-sm'>red</p>
+                        <p className='text-xs text-foreground/50'>
+                          {product.description.length > 15
+                            ? [...product.description]
+                                .splice(0, 15)
+                                .concat("...")
+                                .join("")
+                            : product.description}
+                        </p>
                       </div>
                       <div className='text-right'>
                         <p className='text-lg font-semibold'>{product.price}</p>

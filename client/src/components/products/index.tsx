@@ -71,8 +71,8 @@ export default function Products({
           )}
         </div>
         <div className='mt-3'>
-          {isLoading && "loading..."}
-          {products.length && ""}
+          {!!isLoading && "loading..."}
+          {!!products.length && ""}
           <div className='mx-auto grid w-full max-w-7xl items-center space-y-4 px-2 py-10 md:grid-cols-2 md:gap-6 md:space-y-0 lg:grid-cols-4'>
             {products.length ? (
               products.map((product: any) => (
@@ -88,6 +88,9 @@ export default function Products({
                     <h1 className='inline-flex items-center text-lg font-semibold'>
                       {product.title}
                     </h1>
+                    <span className='block pt-2 text-foreground/70'>
+                      ₹ {product.price}
+                    </span>
                     <p className='mt-3 text-sm text-gray-600'>
                       {product.description}
                     </p>

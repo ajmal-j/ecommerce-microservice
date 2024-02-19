@@ -1,36 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: cart-depl
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: cart
   template:
     metadata:
       labels:
-        app: auth
+        app: cart
     spec:
       containers:
-        - name: auth
-          image: ajmalj/ecom-auth
+        - name: cart
+          image: ajmalj/ecom-cart
           ports:
-            - containerPort: 3000
+            - containerPort: 5000
           env:
             - name : MONGO_URL
-              value: mongodb://auth-db:27017/productdb
+              value: mongodb://cart-db:27017/productdb
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-srv
+  name: cart-srv
 spec:
   selector:
-    app: auth
+    app: cart
   ports:
-    - name: auth
+    - name: cart
       protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 5000
+      targetPort: 5000
