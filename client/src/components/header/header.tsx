@@ -43,18 +43,14 @@ export const Header = () => {
         </Link>
         <div className='flex w-full items-center justify-between max-w-[200px]'>
           <Heart className='cursor-pointer size-5 hover:text-foreground/50' />
-          
           <HoverCart>
-            <Link to={"/cart"}>
-              <div className='relative'>
-                <ShoppingCart className='cursor-pointer size-5 hover:text-foreground/50' />
-                <span className='absolute top-[-2px] font-thin text-xs right-0 bg-background rounded-2xl text-red-600'>
-                  {cart.length || null}
-                </span>
-              </div>
-            </Link>
+            <div className='relative'>
+              <ShoppingCart className='cursor-pointer size-5 hover:text-foreground/50' />
+              <span className='absolute top-[-2px] font-thin text-xs right-0 bg-background rounded-2xl text-red-600'>
+                {cart.length || null}
+              </span>
+            </div>
           </HoverCart>
-
           <DropdownProfile user={user} />
           <ModeToggle />
         </div>
