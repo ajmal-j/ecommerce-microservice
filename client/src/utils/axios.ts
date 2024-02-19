@@ -2,22 +2,22 @@ import axios from "axios";
 import { getLocalStorage } from "./localStorage";
 import toast from "react-hot-toast";
 
-const server = "http://localhost:";
+const server = "http://ecom.com/";
 
 export const productApi = axios.create({
-  baseURL: `${server}4000/api/product/`,
+  baseURL: `${server}api/product/`,
 });
 export const productApiWithToken = axios.create({
-  baseURL: `${server}4000/api/product/`,
+  baseURL: `${server}api/product/`,
 });
 export const authApi = axios.create({
-  baseURL: `${server}3000/api/auth/`,
+  baseURL: `${server}api/auth/`,
 });
 export const cartApi = axios.create({
-  baseURL: `${server}5000/api/cart/`,
+  baseURL: `${server}api/cart/`,
 });
 export const authApiWithToken = axios.create({
-  baseURL: `${server}3000/api/auth/`,
+  baseURL: `${server}api/auth/`,
 });
 
 authApiWithToken.interceptors.request.use(

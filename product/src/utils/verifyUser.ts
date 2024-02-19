@@ -2,10 +2,10 @@ import axios from "axios";
 import { TODO } from "./types";
 
 export async function verifyUser(req: TODO) {
-  if(!req.headers.authorization) throw new Error("Header missing");
-  
+  if (!req.headers.authorization) throw new Error("Header missing");
+
   return axios
-    .get("http://auth:3000/api/auth/current-user", {
+    .get("http://auth-srv:3000/api/auth/current-user", {
       headers: {
         Authorization: req.headers.authorization,
       },
@@ -14,7 +14,8 @@ export async function verifyUser(req: TODO) {
       return response.data.data;
     })
     .catch((err) => {
-      console.log('Response failed in the auth');
+      console.log("Response failed in the auth");
+      console.log(err);
       return err.data;
     });
 }

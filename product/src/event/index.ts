@@ -1,4 +1,2 @@
-// import updateProductInCartEvent from "./producer/editProductInCart";
+import updateProductInCartEvent from "./producer/editProductInCart";
 
-
-// updateProductInCartEvent()
